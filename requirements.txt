@@ -1,8 +1,9 @@
 fastapi
 uvicorn
 python-multipart
-PyPDF2
-openpyxl
+unstructured[xlsx,pdf]
+paddlepaddle
+paddleocr
 requests
 openai
 pytest
