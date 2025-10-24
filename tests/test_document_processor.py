@@ -1,3 +1,6 @@
+# CLI to see the test results: 
+#pytest tests/test_document_processor.py -v -s
+
 import pytest
 from app.services.document_processor import process_documents
 from pathlib import Path
