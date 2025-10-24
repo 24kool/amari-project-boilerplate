@@ -4,6 +4,7 @@ python-multipart
 unstructured[xlsx,pdf]
 paddlepaddle
 paddleocr
+pdf2image
 requests
 openai
 pytest

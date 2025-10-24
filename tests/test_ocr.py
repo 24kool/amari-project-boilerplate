@@ -1,39 +1,60 @@
-import sys
 import os
+import sys
+from pathlib import Path
 
-# Add parent directory to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Add app module to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.utils.doc_utils import extract_text_from_pdf
 
+
 def test_extract_text_from_pdf():
-    """Test extract_text_from_pdf with sample PDF file"""
+    """Test that text is extracted correctly from a PDF"""
+    pdf_path = Path(__file__).parent.parent / "data" / "sample_bill_of_lading.pdf"
     
-    # PDF 파일 경로
-    pdf_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'sample_bill_of_lading.pdf')
+    print("\n" + "="*60)
+    print("📄 PDF OCR Text Extraction Test")
+    print("="*60)
     
-    print(f"\n{'='*60}")
-    print(f"Testing extract_text_from_pdf()")
-    print(f"{'='*60}")
-    print(f"PDF File Path: {pdf_path}")
-    print(f"File Exists: {os.path.exists(pdf_path)}\n")
+    # Check that the PDF file exists
+    if not pdf_path.exists():
+        print(f"❌ PDF file not found: {pdf_path}")
+        return False
     
+    print(f"✓ PDF file found: {pdf_path}")
+    print(f"✓ File size: {pdf_path.stat().st_size / 1024:.2f} KB")
+    
+    # Extract text
+    print("\n⏳ Extracting text with OCR...")
     try:
-        # extract_text_from_pdf 실행
-        result = extract_text_from_pdf(pdf_path)
-        
-        print(f"Extraction Result Type: {type(result)}")
-        print(f"Result Length: {len(str(result))}")
-        print(f"\n{'-'*60}")
-        print("Extracted Content:")
-        print(f"{'-'*60}")
-        print(result)
-        print(f"{'-'*60}\n")
-        
+        text = extract_text_from_pdf(str(pdf_path))
     except Exception as e:
-        print(f"❌ Error occurred: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"❌ Error during extraction: {e}")
+        return False
+    
+    # Check that the text was extracted properly
+    if not text:
+        print("❌ No text extracted")
+        return False
+    
+    if len(text) == 0:
+        print("❌ Extracted text is empty")
+        return False
+    
+    # Success!
+    print("\n✅ PDF text extraction successful!")
+    print(f"✓ Extracted text length: {len(text)} characters")
+    print(f"✓ Word count: {len(text.split())}")
+    
+    print("\n" + "-"*60)
+    print("📋 Extracted text (first 500 characters):")
+    print("-"*60)
+    print(text[:500])
+    print("\n" + "="*60 + "\n")
+    
+    return True
+
 
 if __name__ == "__main__":
-    test_extract_text_from_pdf()
+    success = test_extract_text_from_pdf()
+    exit(0 if success else 1)

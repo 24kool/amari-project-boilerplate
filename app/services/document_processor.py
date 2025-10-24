@@ -14,6 +14,7 @@ def process_documents(file_paths):
     extracted_data = {}
     
     for file_path in file_paths:
+        # Process PDF files
         if file_path.endswith(".pdf"):
             extracted_data['pdf_text'] = extract_text_from_pdf(file_path)
         elif file_path.endswith((".xlsx", ".xls")):
