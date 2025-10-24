@@ -29,7 +29,7 @@ def test_process_documents():
     if 'excel_text' in result:
         print("\n🟢 EXCEL TEXT (Invoice):")
         print("-" * 80)
-        print(result['excel_text'][:500] + "..." if len(result['excel_text']) > 500 else result['excel_text'])
+        print(result['excel_text'])
         print(f"\n📊 Total Excel text length: {len(result['excel_text'])} characters")
     
     print("\n" + "="*80)
