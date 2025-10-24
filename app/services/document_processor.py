@@ -20,5 +20,4 @@ def process_documents(file_paths):
         elif file_path.endswith((".xlsx", ".xls")):
             extracted_data['excel_text'] = extract_text_from_excel(file_path)
     
-    
     return extracted_data 
