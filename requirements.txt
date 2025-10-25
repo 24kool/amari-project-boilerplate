@@ -2,9 +2,10 @@ fastapi
 uvicorn
 python-multipart
 requests
-openai
+google-generativeai
 pytest
 pydantic-settings
+python-dotenv
 
 # --- Core ---
 unstructured==0.14.9
