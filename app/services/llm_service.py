@@ -70,3 +70,11 @@ def extract_average_price_from_document(document_text):
     price_list = [float(num.strip()) for num in price_list.split(",")]
     average_price = sum(price_list) / len(price_list)
     return price_list, average_price
+
+def extract_line_item_count_from_document(document_text):
+
+    prompt = f'Extract the number of line items from the following documents and return it strictly as JSON in the following format: {{"line_item_count": <number>}}. Do not include any other text or numbers. Here is the example output: {{"line_item_count": 10}}\n\n{document_text["excel_text"]}'
+
+    response = model.generate_content(prompt)
+    line_item_count = response.text.strip()
+    return line_item_count
