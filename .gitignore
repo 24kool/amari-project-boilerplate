@@ -1,2 +1,11 @@
+# Python (backend)
 __pycache__
 .env
+
+# Node/Next.js (frontend)
+web/node_modules
+web/.next
+
+# OS/Editor
+.DS_Store
+*.log

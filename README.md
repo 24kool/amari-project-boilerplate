@@ -42,3 +42,15 @@ Run the evaluation script:
 ```bash
     python evaluation.py
 ```
+
+## How to run - AI Customs Tool
+
+### Backend:
+```bash
+    python -m app.main
+```
+
+### Frontend:
+```bash
+    cd web && npm install && npm run dev
+```
