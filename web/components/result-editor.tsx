@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
 
 type Result = {
   general_entity: any
@@ -48,7 +49,16 @@ export function ResultEditor({ files }: Props) {
       </div>
       {error && <div className="text-red-600 text-sm">{error}</div>}
 
-      {data && (
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="flex items-center gap-2">
+            <Loader2 className="h-5 w-5 animate-spin text-gray-600" />
+            <span className="text-sm text-gray-600">Processing documents...</span>
+          </div>
+        </div>
+      )}
+
+      {!loading && data && (
         <div className="grid gap-3">
           <label className="text-sm font-medium">general_entity</label>
           <textarea className="border rounded p-2 min-h-[160px] font-mono text-sm" value={JSON.stringify(data.general_entity, null, 2)} onChange={(e) => {
