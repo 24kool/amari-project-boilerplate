@@ -51,7 +51,7 @@ export function ResultEditor({ files }: Props) {
 
       {loading && (
         <div className="flex items-center justify-center py-12">
-          <div className="flex items-center gap-2">
+          <div className="flex justify-center items-center gap-2">
             <Loader2 className="h-5 w-5 animate-spin text-gray-600" />
             <span className="text-sm text-gray-600">Processing documents...</span>
           </div>

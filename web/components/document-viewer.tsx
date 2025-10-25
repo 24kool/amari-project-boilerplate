@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 import * as XLSX from 'xlsx'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 type Props = { files: File[] }
 
@@ -117,10 +118,10 @@ export function DocumentViewer({ files }: Props) {
   }
 
   return (
-    <div className="w-full h-[70vh] border rounded-md overflow-hidden bg-white flex flex-col">
+    <div className="w-full h-[85vh] border rounded-md overflow-hidden bg-white flex flex-col">
       <div className="flex-1 overflow-auto">
         {isPdf && url ? (
-          <object data={url} type="application/pdf" className="w-full h-full">
+          <object data={`${url}#pagemode=none`} type="application/pdf" className="w-full h-full">
             <p className="p-4 text-sm">PDF preview unavailable. <a className="underline" href={url} target="_blank">Open in new tab</a></p>
           </object>
         ) : isExcel && excelData ? (
@@ -161,18 +162,20 @@ export function DocumentViewer({ files }: Props) {
         <div className="border-t bg-gray-50 px-4 py-3 flex items-center justify-between">
           <button
             onClick={handlePrevious}
-            className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous file"
           >
-            ← Previous
+            <ChevronLeft className="h-4 w-4" />
           </button>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 font-medium">
             {currentIndex + 1} / {files.length}
           </div>
           <button
             onClick={handleNext}
-            className="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next file"
           >
-            Next →
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       )}
