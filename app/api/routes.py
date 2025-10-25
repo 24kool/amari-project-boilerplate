@@ -14,8 +14,9 @@ async def process_documents_endpoint(
 ):
     temp_file_paths = []
     for file in files:
-        # Save uploaded file temporarily
-        temp_file = tempfile.NamedTemporaryFile(suffix=file.filename, delete=False)
+        # Save uploaded file temporarily with correct extension
+        file_extension = os.path.splitext(file.filename)[1] if file.filename else ''
+        temp_file = tempfile.NamedTemporaryFile(suffix=file_extension, delete=False)
         temp_file_paths.append(temp_file.name)
 
         # Write content to temp file

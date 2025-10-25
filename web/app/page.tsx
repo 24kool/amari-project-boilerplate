@@ -6,7 +6,6 @@ import { Header } from '@/components/header'
 
 export default function HomePage() {
   const [files, setFiles] = useState<File[]>([])
-  const primaryFile = files[0] ?? null
 
   return (
     <main className="min-h-screen">
@@ -18,7 +17,7 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <DocumentViewer file={primaryFile} />
+            <DocumentViewer files={files} />
           </div>
           <div>
             <ResultEditor files={files} />
