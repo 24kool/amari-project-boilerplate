@@ -1,65 +1,24 @@
 ### FastAPI Document Processing API Tests
-### Base URL
 @baseUrl = http://localhost:8000
-
-###############################################
-# Health Check / Root Endpoint
-###############################################
-
-### Get root endpoint
-GET {{baseUrl}}/
-Content-Type: application/json
 
 ###############################################
 # Document Processing Endpoints
 ###############################################
-
-### Process documents - Single PDF file
-POST {{baseUrl}}/process-documents
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="files"; filename="BL-COSU534343282.pdf"
-Content-Type: application/pdf
-
-< ./tests/doc/BL-COSU534343282.pdf
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-### Process documents - Single Excel file
-POST {{baseUrl}}/process-documents
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="files"; filename="Demo-Invoice-PackingList_1.xlsx"
-Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-
-< ./tests/doc/Demo-Invoice-PackingList_1.xlsx
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ### Process documents - Multiple files (PDF + Excel)
 POST {{baseUrl}}/process-documents
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="files"; filename="BL-COSU534343282.pdf"
+Content-Disposition: form-data; name="files"; filename="sample_bill_of_lading.pdf"
 Content-Type: application/pdf
 
-< ./tests/doc/BL-COSU534343282.pdf
+< ./data/sample_bill_of_lading.pdf
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="files"; filename="Demo-Invoice-PackingList_1.xlsx"
+Content-Disposition: form-data; name="files"; filename="sample_invoice.xlsx"
 Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 
-< ./tests/doc/Demo-Invoice-PackingList_1.xlsx
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-###############################################
-# Error Cases
-###############################################
-
-### Process documents - No files provided
-POST {{baseUrl}}/process-documents
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
+< ./data/sample_invoice.xlsx
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###############################################
@@ -69,4 +28,3 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 # 3. For IntelliJ/PyCharm: Built-in HTTP Client support
 # 4. Click "Send Request" above each ### section to execute
 ###############################################
-

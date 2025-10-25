@@ -1,4 +1,6 @@
 import google.generativeai as genai
+import json
+import re
 from app.core.config import settings
 
 genai.configure(api_key=settings.GEMINI_API_KEY)
@@ -13,11 +15,11 @@ def extract_entity_from_document(document_text):
         document_text: Text from the document
         
     Returns:
-        str: Extracted field value
+        dict: Extracted field values as a dictionary
     """
 
     prompt = f"""
-You are an information extraction agent. 
+You are an information extraction agent.
 Your goal is to carefully read the following document text and extract key shipping information.
 
 From the text below, identify and extract the following fields:
@@ -27,7 +29,7 @@ From the text below, identify and extract the following fields:
 4. Consignee Address
 5. Date of Export
 
-Return the result **strictly in JSON format** with the following structure:
+Return the result **ONLY as a valid JSON object** with the following structure. Do NOT wrap it in markdown code blocks or ```json``` tags:
 
 {{
   "bill_of_lading_number": "",
@@ -37,15 +39,27 @@ Return the result **strictly in JSON format** with the following structure:
   "date_of_export": ""
 }}
 
-If a field cannot be found, return an empty string for that field.
-Do not add any explanation, text, or commentary — only output valid JSON.
+If a field cannot be found, return an empty string ("") for that field.
+Do not add any explanation, text, commentary, markdown formatting, or code blocks — only output the valid JSON object.
 
 Document text:
 {document_text}
 """
 
     response = model.generate_content(prompt)
-    return response.text.strip()
+    response_text = response.text.strip()
+    
+    # Remove markdown code block formatting if present
+    response_text = re.sub(r'^```(json)?\s*', '', response_text)
+    response_text = re.sub(r'\s*```$', '', response_text)
+    response_text = response_text.strip()
+    
+    # Parse and validate JSON
+    try:
+        return json.loads(response_text)
+    except json.JSONDecodeError:
+        # If parsing fails, return the raw text for debugging
+        return {"error": "Failed to parse JSON", "raw_response": response_text}
 
 def extract_average_gross_weight_from_document(document_text):
 
@@ -73,7 +87,7 @@ def extract_average_price_from_document(document_text):
 
 def extract_line_item_count_from_document(document_text):
 
-    prompt = f'Extract the number of line items from the following documents and return it strictly as JSON in the following format: {{"line_item_count": <number>}}. Do not include any other text or numbers. Here is the example output: {{"line_item_count": 10}}\n\n{document_text["excel_text"]}'
+    prompt = f'Extract only the number of line items from the following documents. Output ONLY the number (no text, no explanation, no JSON). Here is the document content:\n\n{document_text["excel_text"]}'
 
     response = model.generate_content(prompt)
     line_item_count = response.text.strip()
