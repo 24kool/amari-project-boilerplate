@@ -4,11 +4,11 @@ import { Loader2 } from 'lucide-react'
 
 type Result = {
   general_entity: any
-  gross_weight_list: number[]
-  average_gross_weight: number
-  price_list: number[]
-  average_price: number
-  line_item_count: number
+  gross_weight_list: any
+  average_gross_weight: any
+  price_list: any
+  average_price: any
+  line_item_count: any
 }
 
 type Props = { files: File[] }
@@ -55,6 +55,16 @@ export function ResultEditor({ files }: Props) {
   // 데이터가 로드되면 Google Form URL을 pre-fill된 값으로 생성
   useEffect(() => {
     if (data) {
+      // 첫 로드 시 배열을 문자열로 변환
+      if (Array.isArray(data.gross_weight_list)) {
+        setData({ ...data, gross_weight_list: data.gross_weight_list.join(', ') })
+        return
+      }
+      if (Array.isArray(data.price_list)) {
+        setData({ ...data, price_list: data.price_list.join(', ') })
+        return
+      }
+      
       const params = new URLSearchParams()
       
       // general_entity에서 필요한 필드 추출
@@ -170,14 +180,62 @@ export function ResultEditor({ files }: Props) {
 
       {!loading && data && (
         <div className="grid gap-3">
-          <label className="text-sm font-medium text-foreground">general_entity</label>
+          <label className="text-sm font-medium text-foreground">bill_of_lading_number</label>
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={JSON.stringify(data.general_entity, null, 2)} 
+            value={data.general_entity?.bill_of_lading_number || ''} 
             onChange={(e) => {
               autoResize(e)
-              try { setData({ ...data, general_entity: JSON.parse(e.target.value) }) } catch {}
+              setData({ ...data, general_entity: { ...data.general_entity, bill_of_lading_number: e.target.value } })
+            }} 
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">container_number</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.general_entity?.container_number || ''} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, general_entity: { ...data.general_entity, container_number: e.target.value } })
+            }} 
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">consignee_name</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.general_entity?.consignee_name || ''} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, general_entity: { ...data.general_entity, consignee_name: e.target.value } })
+            }} 
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">consignee_address</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.general_entity?.consignee_address || ''} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, general_entity: { ...data.general_entity, consignee_address: e.target.value } })
+            }} 
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">date_of_export</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.general_entity?.date_of_export || ''} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, general_entity: { ...data.general_entity, date_of_export: e.target.value } })
             }} 
             onInput={autoResize}
           />
@@ -186,10 +244,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.gross_weight_list.join(', ')} 
+            value={data.gross_weight_list} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, gross_weight_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })
+              setData({ ...data, gross_weight_list: e.target.value })
             }}
             onInput={autoResize}
           />
@@ -201,7 +259,7 @@ export function ResultEditor({ files }: Props) {
             value={data.average_gross_weight} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, average_gross_weight: Number(e.target.value) })
+              setData({ ...data, average_gross_weight: e.target.value })
             }}
             onInput={autoResize}
           />
@@ -210,10 +268,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.price_list.join(', ')} 
+            value={data.price_list} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, price_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })
+              setData({ ...data, price_list: e.target.value })
             }}
             onInput={autoResize}
           />
@@ -225,7 +283,7 @@ export function ResultEditor({ files }: Props) {
             value={data.average_price} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, average_price: Number(e.target.value) })
+              setData({ ...data, average_price: e.target.value })
             }}
             onInput={autoResize}
           />
@@ -237,7 +295,7 @@ export function ResultEditor({ files }: Props) {
             value={data.line_item_count} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, line_item_count: Number(e.target.value) })
+              setData({ ...data, line_item_count: e.target.value })
             }}
             onInput={autoResize}
           />
