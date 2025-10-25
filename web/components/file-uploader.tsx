@@ -50,9 +50,9 @@ export function FileUploader({ files, onFilesChange }: Props) {
 
   const getFileIcon = (file: File) => {
     if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-      return <FileText className="h-5 w-5 text-red-500" />
+      return <FileText className="h-5 w-5 text-destructive" />
     }
-    return <Sheet className="h-5 w-5 text-green-600" />
+    return <Sheet className="h-5 w-5 text-chart-2" />
   }
 
   return (
@@ -65,16 +65,16 @@ export function FileUploader({ files, onFilesChange }: Props) {
         className={`
           border-2 border-dashed rounded-lg p-8 text-center transition-colors
           ${isDragging 
-            ? 'border-blue-500 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400'
+            ? 'border-primary bg-accent' 
+            : 'border-input hover:border-ring'
           }
         `}
       >
-        <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-        <p className="text-lg font-medium mb-2">
+        <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+        <p className="text-lg font-medium text-foreground mb-2">
           Drag and drop files here
         </p>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           or click to select files (PDF, Excel)
         </p>
         <input
@@ -87,7 +87,7 @@ export function FileUploader({ files, onFilesChange }: Props) {
         />
         <label
           htmlFor="file-input"
-          className="inline-block px-4 py-2 bg-blue-600 text-white rounded-md cursor-pointer hover:bg-blue-700 transition"
+          className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md cursor-pointer hover:bg-primary/90 transition-colors"
         >
           Select Files
         </label>
@@ -96,29 +96,29 @@ export function FileUploader({ files, onFilesChange }: Props) {
       {/* File List */}
       {files.length > 0 && (
         <div className="mt-4 space-y-2">
-          <h3 className="text-sm font-medium text-gray-700">
+          <h3 className="text-sm font-medium text-foreground">
             Uploaded Files ({files.length})
           </h3>
           {files.map((file, index) => (
             <div
               key={index}
-              className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-md"
+              className="flex items-center gap-3 p-3 bg-card border border-border rounded-md"
             >
               {getFileIcon(file)}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-foreground truncate">
                   {file.name}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   {formatFileSize(file.size)}
                 </p>
               </div>
               <button
                 onClick={() => removeFile(index)}
-                className="p-1 hover:bg-gray-200 rounded transition"
+                className="p-1 hover:bg-accent rounded transition-colors"
                 aria-label="Remove file"
               >
-                <X className="h-4 w-4 text-gray-500" />
+                <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
               </button>
             </div>
           ))}

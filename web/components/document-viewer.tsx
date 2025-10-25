@@ -118,7 +118,7 @@ export function DocumentViewer({ files }: Props) {
   }
 
   return (
-    <div className="w-full h-[85vh] border rounded-md overflow-hidden bg-white flex flex-col">
+    <div className="w-full h-[85vh] border border-border rounded-md overflow-hidden bg-card flex flex-col">
       <div className="flex-1 overflow-auto">
         {isPdf && url ? (
           <object data={`${url}#pagemode=none`} type="application/pdf" className="w-full h-full">
@@ -126,16 +126,16 @@ export function DocumentViewer({ files }: Props) {
           </object>
         ) : isExcel && excelData ? (
           <div className="p-4">
-            <div className="text-sm font-semibold mb-2">{file.name}</div>
+            <div className="text-sm font-semibold text-foreground mb-2">{file.name}</div>
             <div className="overflow-x-auto">
-              <table className="min-w-full border-collapse border border-gray-300 text-sm">
+              <table className="min-w-full border-collapse border border-border text-sm">
                 <tbody>
                   {excelData.map((row, rowIndex) => (
-                    <tr key={rowIndex} className={rowIndex === 0 ? 'bg-gray-100 font-semibold' : ''}>
+                    <tr key={rowIndex} className={rowIndex === 0 ? 'bg-muted font-semibold' : ''}>
                       {row.map((cell, cellIndex) => (
                         <td 
                           key={cellIndex} 
-                          className="border border-gray-300 px-3 py-2"
+                          className="border border-border px-3 py-2 text-foreground"
                         >
                           {cell !== null && cell !== undefined ? String(cell) : ''}
                         </td>
@@ -147,11 +147,11 @@ export function DocumentViewer({ files }: Props) {
             </div>
           </div>
         ) : isExcel && !excelData ? (
-          <div className="p-4 text-sm">
+          <div className="p-4 text-sm text-muted-foreground">
             Loading Excel file...
           </div>
         ) : (
-          <div className="p-4 text-sm">
+          <div className="p-4 text-sm text-muted-foreground">
             Preview not supported for this file type. ({file.name})
           </div>
         )}
@@ -159,20 +159,20 @@ export function DocumentViewer({ files }: Props) {
       
       {/* Navigation Controls */}
       {files.length > 1 && (
-        <div className="border-t bg-gray-50 px-4 py-3 flex items-center justify-between">
+        <div className="border-t border-border bg-muted px-4 py-3 flex items-center justify-between">
           <button
             onClick={handlePrevious}
-            className="p-2 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Previous file"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <div className="text-sm text-gray-600 font-medium">
+          <div className="text-sm text-muted-foreground font-medium">
             {currentIndex + 1} / {files.length}
           </div>
           <button
             onClick={handleNext}
-            className="p-2 bg-white border border-gray-300 rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 bg-background border border-input rounded-md hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Next file"
           >
             <ChevronRight className="h-4 w-4" />
