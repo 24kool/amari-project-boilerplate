@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Loader2 } from 'lucide-react'
 
 type Result = {
@@ -39,6 +39,22 @@ export function ResultEditor({ files }: Props) {
     if (!data) return
     navigator.clipboard.writeText(JSON.stringify(data, null, 2))
   }
+
+  function autoResize(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    e.target.style.height = 'auto'
+    e.target.style.height = e.target.scrollHeight + 'px'
+  }
+
+  useEffect(() => {
+    if (data) {
+      // 데이터 로드 후 모든 textarea 높이 자동 조절
+      const textareas = document.querySelectorAll('textarea')
+      textareas.forEach((textarea) => {
+        textarea.style.height = 'auto'
+        textarea.style.height = textarea.scrollHeight + 'px'
+      })
+    }
+  }, [data])
 
   return (
     <div className="space-y-4">
@@ -80,49 +96,74 @@ export function ResultEditor({ files }: Props) {
         <div className="grid gap-3">
           <label className="text-sm font-medium text-foreground">general_entity</label>
           <textarea 
-            className="flex min-h-[160px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
             value={JSON.stringify(data.general_entity, null, 2)} 
             onChange={(e) => {
+              autoResize(e)
               try { setData({ ...data, general_entity: JSON.parse(e.target.value) }) } catch {}
             }} 
+            onInput={autoResize}
           />
 
           <label className="text-sm font-medium text-foreground">gross_weight_list (comma separated)</label>
-          <input 
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
             value={data.gross_weight_list.join(', ')} 
-            onChange={(e) => setData({ ...data, gross_weight_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, gross_weight_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })
+            }}
+            onInput={autoResize}
           />
 
           <label className="text-sm font-medium text-foreground">average_gross_weight</label>
-          <input 
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
-            type="number" 
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
             value={data.average_gross_weight} 
-            onChange={(e) => setData({ ...data, average_gross_weight: Number(e.target.value) })} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, average_gross_weight: Number(e.target.value) })
+            }}
+            onInput={autoResize}
           />
 
           <label className="text-sm font-medium text-foreground">price_list (comma separated)</label>
-          <input 
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
             value={data.price_list.join(', ')} 
-            onChange={(e) => setData({ ...data, price_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, price_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })
+            }}
+            onInput={autoResize}
           />
 
           <label className="text-sm font-medium text-foreground">average_price</label>
-          <input 
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
-            type="number" 
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
             value={data.average_price} 
-            onChange={(e) => setData({ ...data, average_price: Number(e.target.value) })} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, average_price: Number(e.target.value) })
+            }}
+            onInput={autoResize}
           />
 
           <label className="text-sm font-medium text-foreground">line_item_count</label>
-          <input 
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" 
-            type="number" 
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
             value={data.line_item_count} 
-            onChange={(e) => setData({ ...data, line_item_count: Number(e.target.value) })} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, line_item_count: Number(e.target.value) })
+            }}
+            onInput={autoResize}
           />
         </div>
       )}
