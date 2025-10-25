@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.services.document_processor import process_documents
-from app.services.llm_service import extract_average_numbers_from_document
+from app.services.llm_service import extract_entity_from_document
 
 if __name__ == "__main__":
     # Define file paths for both PDF and Excel files
@@ -23,8 +23,7 @@ if __name__ == "__main__":
     print(f"Extracted Excel content: {len(result.get('excel_text', ''))} characters")
 
     # Extract average numbers from document
-    avg_numbers_list, avg_numbers = extract_average_numbers_from_document(result)
-    print(f"Average numbers list: {avg_numbers_list}")
-    print(f"Average numbers: {avg_numbers}")
+    entity_data = extract_entity_from_document(result)
+    print(f"Entity data: {entity_data}")
     success = bool(result)
     exit(0 if success else 1)

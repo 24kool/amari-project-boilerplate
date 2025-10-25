@@ -4,7 +4,7 @@ import os
 import tempfile
 
 from app.services.document_processor import process_documents
-from app.services.llm_service import extract_field_from_document, extract_average_numbers_from_document
+from app.services.llm_service import extract_entity_from_document, extract_average_gross_weight_from_document, extract_average_price_from_document
 
 router = APIRouter()
 
@@ -27,10 +27,12 @@ async def process_documents_endpoint(
     document_data = process_documents(temp_file_paths)
 
     # Extract data from document
-    extracted_data = extract_field_from_document(document_data)
+    extracted_data = extract_entity_from_document(document_data)
 
     # Extract average numbers from document
-    avg_numbers = extract_average_numbers_from_document(document_data)
+    avg_numbers_list, avg_numbers = extract_average_gross_weight_from_document(document_data)
+
+    price_list, average_price = extract_average_price_from_document(document_data)
 
     # Clean up temp files
     for path in temp_file_paths:
