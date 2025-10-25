@@ -178,16 +178,16 @@ export function ResultEditor({ files }: Props) {
         </div>
       )}
 
-      {!loading && data && (
+      {!loading && (
         <div className="grid gap-3">
           <label className="text-sm font-medium text-foreground">bill_of_lading_number</label>
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.general_entity?.bill_of_lading_number || ''} 
+            value={data?.general_entity?.bill_of_lading_number || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, general_entity: { ...data.general_entity, bill_of_lading_number: e.target.value } })
+              setData(data ? { ...data, general_entity: { ...data.general_entity, bill_of_lading_number: e.target.value } } : { general_entity: { bill_of_lading_number: e.target.value }, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: '', line_item_count: '' })
             }} 
             onInput={autoResize}
           />
@@ -196,10 +196,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.general_entity?.container_number || ''} 
+            value={data?.general_entity?.container_number || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, general_entity: { ...data.general_entity, container_number: e.target.value } })
+              setData(data ? { ...data, general_entity: { ...data.general_entity, container_number: e.target.value } } : { general_entity: { container_number: e.target.value }, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: '', line_item_count: '' })
             }} 
             onInput={autoResize}
           />
@@ -208,10 +208,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.general_entity?.consignee_name || ''} 
+            value={data?.general_entity?.consignee_name || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, general_entity: { ...data.general_entity, consignee_name: e.target.value } })
+              setData(data ? { ...data, general_entity: { ...data.general_entity, consignee_name: e.target.value } } : { general_entity: { consignee_name: e.target.value }, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: '', line_item_count: '' })
             }} 
             onInput={autoResize}
           />
@@ -220,10 +220,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.general_entity?.consignee_address || ''} 
+            value={data?.general_entity?.consignee_address || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, general_entity: { ...data.general_entity, consignee_address: e.target.value } })
+              setData(data ? { ...data, general_entity: { ...data.general_entity, consignee_address: e.target.value } } : { general_entity: { consignee_address: e.target.value }, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: '', line_item_count: '' })
             }} 
             onInput={autoResize}
           />
@@ -232,10 +232,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.general_entity?.date_of_export || ''} 
+            value={data?.general_entity?.date_of_export || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, general_entity: { ...data.general_entity, date_of_export: e.target.value } })
+              setData(data ? { ...data, general_entity: { ...data.general_entity, date_of_export: e.target.value } } : { general_entity: { date_of_export: e.target.value }, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: '', line_item_count: '' })
             }} 
             onInput={autoResize}
           />
@@ -244,10 +244,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.gross_weight_list} 
+            value={data?.gross_weight_list || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, gross_weight_list: e.target.value })
+              setData(data ? { ...data, gross_weight_list: e.target.value } : { general_entity: {}, gross_weight_list: e.target.value, average_gross_weight: '', price_list: '', average_price: '', line_item_count: '' })
             }}
             onInput={autoResize}
           />
@@ -256,10 +256,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.average_gross_weight} 
+            value={data?.average_gross_weight || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, average_gross_weight: e.target.value })
+              setData(data ? { ...data, average_gross_weight: e.target.value } : { general_entity: {}, gross_weight_list: '', average_gross_weight: e.target.value, price_list: '', average_price: '', line_item_count: '' })
             }}
             onInput={autoResize}
           />
@@ -268,10 +268,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.price_list} 
+            value={data?.price_list || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, price_list: e.target.value })
+              setData(data ? { ...data, price_list: e.target.value } : { general_entity: {}, gross_weight_list: '', average_gross_weight: '', price_list: e.target.value, average_price: '', line_item_count: '' })
             }}
             onInput={autoResize}
           />
@@ -280,10 +280,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.average_price} 
+            value={data?.average_price || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, average_price: e.target.value })
+              setData(data ? { ...data, average_price: e.target.value } : { general_entity: {}, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: e.target.value, line_item_count: '' })
             }}
             onInput={autoResize}
           />
@@ -292,10 +292,10 @@ export function ResultEditor({ files }: Props) {
           <textarea 
             rows={1}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
-            value={data.line_item_count} 
+            value={data?.line_item_count || ''} 
             onChange={(e) => {
               autoResize(e)
-              setData({ ...data, line_item_count: e.target.value })
+              setData(data ? { ...data, line_item_count: e.target.value } : { general_entity: {}, gross_weight_list: '', average_gross_weight: '', price_list: '', average_price: '', line_item_count: e.target.value })
             }}
             onInput={autoResize}
           />
