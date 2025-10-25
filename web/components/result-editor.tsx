@@ -55,88 +55,82 @@ export function ResultEditor({ files }: Props) {
   // 데이터가 로드되면 Google Form URL을 pre-fill된 값으로 생성
   useEffect(() => {
     if (data) {
-      console.log('📊 Received data:', JSON.stringify(data, null, 2))
-      
       const params = new URLSearchParams()
       
       // general_entity에서 필요한 필드 추출
       const entity = data.general_entity || {}
-      console.log('📦 Entity:', JSON.stringify(entity, null, 2))
-      console.log('📦 Entity keys:', Object.keys(entity))
       
       // Bill of Lading Number
       const blValue = entity.bill_of_lading_number || entity.billOfLadingNumber || entity.bl_number || ''
-      console.log('🏷️ Bill of Lading:', blValue)
       if (blValue) {
         params.append(`entry.${FORM_ENTRY_IDS.billOfLading}`, blValue)
       }
       
       // Container Number
       const containerValue = entity.container_number || entity.containerNumber || ''
-      console.log('📦 Container:', containerValue)
       if (containerValue) {
         params.append(`entry.${FORM_ENTRY_IDS.containerNumber}`, containerValue)
       }
       
       // Consignee Name
       const consigneeNameValue = entity.consignee_name || entity.consigneeName || entity.consignee || ''
-      console.log('👤 Consignee Name:', consigneeNameValue)
       if (consigneeNameValue) {
         params.append(`entry.${FORM_ENTRY_IDS.consigneeName}`, consigneeNameValue)
       }
       
       // Consignee Address
       const addressValue = entity.consignee_address || entity.consigneeAddress || ''
-      console.log('📍 Address:', addressValue)
       if (addressValue) {
         params.append(`entry.${FORM_ENTRY_IDS.consigneeAddress}`, addressValue)
       }
       
       // Date of Export
       const dateValue = entity.date_of_export || entity.dateOfExport || entity.export_date || ''
-      console.log('📅 Date:', dateValue)
       if (dateValue) {
         params.append(`entry.${FORM_ENTRY_IDS.dateOfExport}`, dateValue)
       }
       
       // Line Items Count
-      console.log('🔢 Line Items:', data.line_item_count)
       if (data.line_item_count) {
         params.append(`entry.${FORM_ENTRY_IDS.lineItemsCount}`, String(data.line_item_count))
       }
       
       // Average Gross Weight
-      console.log('⚖️ Weight:', data.average_gross_weight)
       if (data.average_gross_weight) {
         params.append(`entry.${FORM_ENTRY_IDS.averageGrossWeight}`, String(data.average_gross_weight))
       }
       
       // Average Price
-      console.log('💰 Price:', data.average_price)
       if (data.average_price) {
         params.append(`entry.${FORM_ENTRY_IDS.averagePrice}`, String(data.average_price))
       }
       
       const url = `${FORM_BASE_URL}?${params.toString()}`
-      console.log('🔗 Generated URL:', url)
-      console.log('🔗 URL params:', params.toString())
       setFormUrl(url)
-      
-      // 자동으로 새 탭에서 Form 열기
-      window.open(url, '_blank')
     }
   }, [data])
-
-  function copyJson() {
-    if (!data) return
-    navigator.clipboard.writeText(JSON.stringify(data, null, 2))
-  }
 
   function openFormInNewTab() {
     if (formUrl) {
       window.open(formUrl, '_blank')
     }
   }
+
+  function autoResize(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    e.target.style.height = 'auto'
+    e.target.style.height = e.target.scrollHeight + 'px'
+  }
+
+  useEffect(() => {
+    if (data) {
+      // 데이터 로드 후 모든 textarea 높이 자동 조절
+      const textareas = document.querySelectorAll('textarea')
+      textareas.forEach((textarea) => {
+        textarea.style.height = 'auto'
+        textarea.style.height = textarea.scrollHeight + 'px'
+      })
+    }
+  }, [data])
 
   return (
     <div className="space-y-4">
@@ -156,11 +150,11 @@ export function ResultEditor({ files }: Props) {
           Reset
         </button>
         <button 
-          className="border border-input bg-background hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:pointer-events-none rounded-md px-4 py-2 text-sm font-medium transition-colors"
-          onClick={copyJson} 
+          className="bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none rounded-md px-4 py-2 text-sm font-medium transition-colors"
+          onClick={openFormInNewTab} 
           disabled={!data}
         >
-          Copy JSON
+          Fill out Google Form
         </button>
       </div>
       {error && <div className="text-destructive text-sm">{error}</div>}
@@ -175,42 +169,78 @@ export function ResultEditor({ files }: Props) {
       )}
 
       {!loading && data && (
-        <div className="space-y-4">
-          <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-green-900 mb-2">
-                  Processing Complete! Google Form Opened Automatically
-                </h3>
-                <p className="text-sm text-green-700 mb-3">
-                  The Google Form with auto-filled data has been opened in a new tab. 
-                  Please review and submit the form.
-                </p>
-                <div className="mt-4 p-3 bg-white rounded border border-green-200">
-                  <p className="text-xs font-medium text-gray-600 mb-1">Form URL:</p>
-                  <a 
-                    href={formUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-xs text-blue-600 hover:underline break-all"
-                  >
-                    {formUrl}
-                  </a>
-                </div>
-                <button
-                  onClick={openFormInNewTab}
-                  className="mt-3 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
-                >
-                  Open Again
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="grid gap-3">
+          <label className="text-sm font-medium text-foreground">general_entity</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={JSON.stringify(data.general_entity, null, 2)} 
+            onChange={(e) => {
+              autoResize(e)
+              try { setData({ ...data, general_entity: JSON.parse(e.target.value) }) } catch {}
+            }} 
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">gross_weight_list (comma separated)</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.gross_weight_list.join(', ')} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, gross_weight_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })
+            }}
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">average_gross_weight</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.average_gross_weight} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, average_gross_weight: Number(e.target.value) })
+            }}
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">price_list (comma separated)</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.price_list.join(', ')} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, price_list: e.target.value.split(',').map(v => Number(v.trim())).filter(v => !Number.isNaN(v)) })
+            }}
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">average_price</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.average_price} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, average_price: Number(e.target.value) })
+            }}
+            onInput={autoResize}
+          />
+
+          <label className="text-sm font-medium text-foreground">line_item_count</label>
+          <textarea 
+            rows={1}
+            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none overflow-hidden" 
+            value={data.line_item_count} 
+            onChange={(e) => {
+              autoResize(e)
+              setData({ ...data, line_item_count: Number(e.target.value) })
+            }}
+            onInput={autoResize}
+          />
         </div>
       )}
     </div>
