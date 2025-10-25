@@ -52,10 +52,9 @@ export function ResultEditor({ files }: Props) {
     } finally { setLoading(false) }
   }
 
-  // 데이터가 로드되면 Google Form URL을 pre-fill된 값으로 생성
+  // When data is loaded, generate a Google Form URL with pre-filled values.
   useEffect(() => {
     if (data) {
-      // 첫 로드 시 배열을 문자열로 변환
       if (Array.isArray(data.gross_weight_list)) {
         setData({ ...data, gross_weight_list: data.gross_weight_list.join(', ') })
         return
@@ -67,7 +66,7 @@ export function ResultEditor({ files }: Props) {
       
       const params = new URLSearchParams()
       
-      // general_entity에서 필요한 필드 추출
+      // Extract required fields from general_entity
       const entity = data.general_entity || {}
       
       // Bill of Lading Number
@@ -133,7 +132,7 @@ export function ResultEditor({ files }: Props) {
 
   useEffect(() => {
     if (data) {
-      // 데이터 로드 후 모든 textarea 높이 자동 조절
+      // After data is loaded, automatically adjust the height of all textareas
       const textareas = document.querySelectorAll('textarea')
       textareas.forEach((textarea) => {
         textarea.style.height = 'auto'
