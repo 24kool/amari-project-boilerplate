@@ -49,7 +49,7 @@ def test_extract_text_from_pdf():
     print("\n" + "-"*60)
     print("📋 Extracted text (first 500 characters):")
     print("-"*60)
-    print(text[:500])
+    print(text)
     print("\n" + "="*60 + "\n")
     
     return True

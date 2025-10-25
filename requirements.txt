@@ -1,11 +1,29 @@
 fastapi
 uvicorn
 python-multipart
-unstructured[xlsx,pdf]
-paddlepaddle
-paddleocr
-pdf2image
 requests
 openai
 pytest
 pydantic-settings
+
+# --- Core ---
+unstructured==0.14.9
+unstructured-inference==0.7.33
+unstructured-paddleocr==2.10.0
+unstructured[xlsx]
+
+# --- OCR engines ---
+# PaddleOCR
+paddlepaddle==2.6.1
+paddleocr==2.9.1
+pytesseract
+
+# --- PDF dependencies ---
+pdfminer.six==20221105
+pdf2image
+pillow-heif
+Pillow
+
+# --- Utils ---
+numpy
+psutil

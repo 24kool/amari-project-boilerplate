@@ -4,12 +4,11 @@ from unstructured.partition.auto import partition
 
 # Use PaddleOCR
 os.environ["OCR_AGENT"] = "unstructured.partition.utils.ocr_models.paddle_ocr.OCRAgentPaddle"
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 def extract_text_from_pdf(file_path: str) -> str:
     
     elements = partition(filename=file_path, strategy="ocr_only", languages=["en"])
-    text = "\n".join(str(el) for el in elements).strip()
+    text = "\n".join(str(el) for el in elements)
     return text
 
 def extract_text_from_excel(file_path: str) -> str:
